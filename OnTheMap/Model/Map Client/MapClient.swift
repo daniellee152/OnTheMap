@@ -63,8 +63,15 @@ class MapClient {
                     completion(responseObject, nil)
                 }
             }catch{
-                DispatchQueue.main.async {
-                    completion(nil, error)
+                do{
+                    let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: data) as Error
+                    DispatchQueue.main.async {
+                        completion(nil, errorResponse)
+                    }
+                }catch{
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
                 }
             }
         }
