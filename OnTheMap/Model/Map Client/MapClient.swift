@@ -28,7 +28,7 @@ class MapClient {
             case .logout:
                 return Endpoints.base + "/session"
             case .webAuth:
-                return "https://auth.udacity.com/sign-up" + "?redirect_to=onthemap:authenticate"
+                return "https://auth.udacity.com/sign-up"
             }
         }
         
@@ -38,7 +38,7 @@ class MapClient {
     }
     
     
-    //MARK: - Task For Post Requests
+    //MARK: - POST REQUEST
     class func taskForPostRequest<RequestType : Encodable, ResponseType: Decodable>(url : URL, response: ResponseType.Type,  body : RequestType, completion: @escaping(ResponseType?, Error?) -> Void){
         
         var request = URLRequest(url: url)
@@ -85,7 +85,7 @@ class MapClient {
         }
     }
     
-    
+//MARK: - DELETE REQUEST
     class func logout(completion : @escaping () -> Void ){
         var request = URLRequest(url: Endpoints.logout.url)
         request.httpMethod = "DELETE"

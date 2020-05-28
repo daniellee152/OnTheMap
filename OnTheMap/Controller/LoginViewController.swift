@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import WebKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, WKUIDelegate {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
+    var webView: WKWebView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +39,8 @@ class LoginViewController: UIViewController {
     
     @IBAction func SignUpTapped(_ sender: UIButton) {
         setLoggingIn(true)
-        DispatchQueue.main.async {
-            UIApplication.shared.open(MapClient.Endpoints.webAuth.url, options: [:], completionHandler: nil)
+        UIApplication.shared.open(MapClient.Endpoints.webAuth.url, options: [:]) { (success) in
+            self.setLoggingIn(false)
         }
     }
     
