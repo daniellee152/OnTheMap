@@ -16,4 +16,12 @@ extension UIViewController{
             }
         }
     }
+
+    @IBAction func refreshTapped(_ sender: UIBarButtonItem) {
+    }
+    
+    @IBAction func addUserLocationTapped(_ sender: UIBarButtonItem) {
+
+    }
+    
 }

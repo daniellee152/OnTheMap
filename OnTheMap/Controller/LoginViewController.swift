@@ -16,7 +16,6 @@ class LoginViewController: UIViewController, WKUIDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
-    var webView: WKWebView!
     
     
     override func viewDidLoad() {
@@ -30,11 +29,27 @@ class LoginViewController: UIViewController, WKUIDelegate {
     
     func handleLoginResponse(success: Bool, error: Error?){
         if success{
+            MapClient.getStudentLocation(completion: handleGetStudentLocation(students:error:))
+            MapClient.getPublicUser { (success, error) in
+                if error != nil{
+                    print("error getting public user")
+                }
+                print(MapClient.Auth.firstName)
+                print(MapClient.Auth.lastName)
+            }
             self.performSegue(withIdentifier: "completeLogin", sender: nil)
             self.setLoggingIn(false)
         }else{
             self.showLoginFailure(message: error?.localizedDescription ?? "")
         }
+    }
+    
+    func handleGetStudentLocation(students : [StudentInfo], error: Error?){
+        if error != nil{
+            print("error getting student location")
+        }
+        StudentModel.loccation = students
+ 
     }
     
     @IBAction func SignUpTapped(_ sender: UIButton) {
