@@ -8,11 +8,8 @@
 
 import Foundation
 
-struct PublicUserResponse : Codable {
-    let user : User
-}
 
-struct User : Codable {
+struct UserData : Codable {
     let lastName : String
     let firstName : String
     

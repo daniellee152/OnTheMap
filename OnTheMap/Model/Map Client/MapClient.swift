@@ -33,6 +33,7 @@ class MapClient {
         case studentLocations(by: optionalParameter)
         case userInfo(String)
         case postStudentLocation
+        case putStudentLocation
         
         var stringValue: String {
             switch self {
@@ -57,6 +58,8 @@ class MapClient {
                 return Endpoints.base + "/StudentLocation"
             case let .userInfo(userId):
                 return Endpoints.base + "/users/\(userId)"
+            case .putStudentLocation:
+                return Endpoints.base + "StudentLocation/\(Auth.sessionId)"
             }
         }
         
@@ -123,7 +126,7 @@ class MapClient {
         }
     }
     
-//MARK: - GET REQUEST
+    //MARK: - GET REQUEST
     class func taskForGetRequest<ResponseType : Decodable>(url : URL, responseType: ResponseType.Type, completion : @escaping(ResponseType?, Error?)->Void){
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
@@ -156,7 +159,6 @@ class MapClient {
     
     
     class func getStudentLocation(completion : @escaping([StudentInfo], Error?)->Void){
-        
         taskForGetRequest(url: Endpoints.studentLocations(by: .order(limit: "100")).url, responseType: StudentLocationResponse.self) { (response, error) in
             if let response = response {
                 StudentModel.loccation = response.results
@@ -167,21 +169,38 @@ class MapClient {
         }
     }
     
-
-    class func getPublicUser(completion : @escaping(Bool,Error?)->Void){
-        taskForGetRequest(url: Endpoints.userInfo(Auth.userId).url, responseType: PublicUserResponse.self) { (response, error) in
-            if let response = response{
-                Auth.firstName = response.user.firstName
-                Auth.lastName = response.user.lastName
-                completion(true, nil)
-            }else{
-                completion(false, error)
+    
+    class func getPublicUser(completion : @escaping(UserData?,Error?)->Void){
+        let request = URLRequest(url : Endpoints.userInfo(Auth.userId).url)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) {data, response, error in
+            guard let data = data else{
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do{
+                let range = 5..<data.count
+                let newData = data.subdata(in: range)
+                let responseObject = try decoder.decode(UserData.self, from: newData)
+                DispatchQueue.main.async {
+                    Auth.firstName = responseObject.firstName
+                    Auth.lastName = responseObject.lastName
+                    completion(responseObject, nil)
+                }
+            }catch{
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
             }
         }
+        task.resume()
     }
     
     
-//MARK: - DELETE REQUEST
+    //MARK: - DELETE REQUEST
     class func logout(completion : @escaping () -> Void ){
         var request = URLRequest(url: Endpoints.logout.url)
         request.httpMethod = "DELETE"
@@ -197,6 +216,35 @@ class MapClient {
         let task = session.dataTask(with: request) { data, response, error in
             Auth.sessionId = ""
             completion()
+        }
+        task.resume()
+    }
+    
+    //MARK: - POST REQUEST
+    class func postStudentLocation(key : String, firstName : String, lastName:String, mapString: String, mediaURL: String, lat : Double, long : Double  ,completion : @escaping(Bool, Error?)->Void){
+        let body = StudentLocationRequest(uniqueKey: key, firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaURL, latitude: lat, longitude: long)
+        var request = URLRequest(url: Endpoints.postStudentLocation.url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try! JSONEncoder().encode(body)
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data else{
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do{
+                _ = try decoder.decode(PostStudentLocationResponse.self, from: data)
+                DispatchQueue.main.async {
+                    completion(true, nil)
+                }
+            }catch {
+                completion(false, error)
+            }
         }
         task.resume()
     }

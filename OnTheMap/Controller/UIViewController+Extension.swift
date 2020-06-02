@@ -18,10 +18,16 @@ extension UIViewController{
     }
 
     @IBAction func refreshTapped(_ sender: UIBarButtonItem) {
+        MapClient.getStudentLocation { (students, error) in
+            if error != nil {
+                print("error refresh tapped")
+            }
+            StudentModel.loccation = students
+        }
     }
     
     @IBAction func addUserLocationTapped(_ sender: UIBarButtonItem) {
-
+        performSegue(withIdentifier: "addLocation", sender: nil)
     }
     
 }

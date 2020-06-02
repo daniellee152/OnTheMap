@@ -1,8 +1,8 @@
 //
-//  MapViewController.swift
+//  LocationViewController.swift
 //  OnTheMap
 //
-//  Created by Le Dat on 6/1/20.
+//  Created by Le Dat on 6/2/20.
 //  Copyright © 2020 Le Dat. All rights reserved.
 //
 
@@ -10,51 +10,53 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class LocationViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
+    var link : String!
+    var location : String!
+    var lat : Double!
+    var long : Double!
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
-        self.mapView.delegate = self
         super.viewDidLoad()
-        // We will create an MKPointAnnotation for each dictionary in "locations". The
-        // point annotations will be stored in this array, and then provided to the map view.
-        var annotations = [MKPointAnnotation]()
+        mapView.delegate = self
+        // Convert location to lat/lon
         
-        // The "locations" array is loaded with the sample data below. We are using the dictionaries
-        // to create map annotations. This would be more stylish if the dictionaries were being
-        // used to create custom structs. Perhaps StudentLocation structs.
-        MapClient.getStudentLocation { (students, error) in
-            for student in students {
-                // Notice that the float values are being used to create CLLocationDegree values.
-                // This is a version of the Double type.
-                let lat = CLLocationDegrees(student.latitude)
-                let long = CLLocationDegrees(student.longitude)
-                
-                // The lat and long are used to create a CLLocationCoordinates2D instance.
-                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-                
-                let first = student.firstName
-                let last = student.lastName
-                let mediaURL = student.mediaURL
-                
-                // Here we create the annotation and set its coordiate, title, and subtitle properties
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "\(first) \(last)"
-                annotation.subtitle = mediaURL
-                
-                // Finally we place the annotation in an array of annotations.
-                annotations.append(annotation)
-            }
-            // When the array is complete, we add the annotations to the map.
-            self.mapView.addAnnotations(annotations)
+        let geoCoder = CLGeocoder()
+        geoCoder.geocodeAddressString(location!) { (placemarks, error) in
+            let placemark = placemarks?.first
+            self.lat = placemark?.location?.coordinate.latitude
+            self.long = placemark?.location?.coordinate.longitude
+            
+            let coordinate = CLLocationCoordinate2D(latitude: self.lat!, longitude: self.long!)
+            let first = MapClient.Auth.firstName
+            let last = MapClient.Auth.lastName
+            let mediaURL = self.link!
+            
+            // Create annotation
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = "\(first) \(last)"
+            annotation.subtitle = mediaURL
+            self.mapView.addAnnotation(annotation)
+            
+            //zooming in annotation
+            let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 50 * 1609.34, longitudinalMeters: 50 * 1609.34)
+            self.mapView.setRegion(region, animated: true)
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        mapView.reloadInputViews()
+    @IBAction func finishTapped(_ sender: UIButton) {
+        MapClient.postStudentLocation(key: MapClient.Auth.userId, firstName: MapClient.Auth.firstName, lastName: MapClient.Auth.lastName, mapString: location, mediaURL: link, lat: lat, long: long) { (success, error) in
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            }else{
+                print("error putting student location")
+            }
+        }
     }
+    
     
     // MARK: - MKMapViewDelegate
     

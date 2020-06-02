@@ -30,12 +30,10 @@ class LoginViewController: UIViewController, WKUIDelegate {
     func handleLoginResponse(success: Bool, error: Error?){
         if success{
             MapClient.getStudentLocation(completion: handleGetStudentLocation(students:error:))
-            MapClient.getPublicUser { (success, error) in
+            MapClient.getPublicUser { (response, error) in
                 if error != nil{
-                    print("error getting public user")
+                    print("error getting public user profile")
                 }
-                print(MapClient.Auth.firstName)
-                print(MapClient.Auth.lastName)
             }
             self.performSegue(withIdentifier: "completeLogin", sender: nil)
             self.setLoggingIn(false)
