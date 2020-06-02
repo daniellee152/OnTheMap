@@ -50,6 +50,9 @@ class LocationViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     @IBAction func finishTapped(_ sender: UIButton) {
         MapClient.postStudentLocation(key: MapClient.Auth.userId, firstName: MapClient.Auth.firstName, lastName: MapClient.Auth.lastName, mapString: location, mediaURL: link, lat: lat, long: long) { (success, error) in
             if success {
+                MapClient.getStudentLocation { (students, error) in
+                    StudentModel.loccation = students
+                }
                 self.dismiss(animated: true, completion: nil)
             }else{
                 print("error putting student location")
