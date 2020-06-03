@@ -39,7 +39,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fVx-au-LJF" customClass="DesignableView" customModule="OnTheMap" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="382" height="50"/>
                                                         <subviews>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="dat123@gmail.com" borderStyle="roundedRect" placeholder="Emaill address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hVK-10-Gb4">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="dat1234@gmail.com" borderStyle="roundedRect" placeholder="Emaill address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hVK-10-Gb4">
                                                                 <rect key="frame" x="0.0" y="0.0" width="382" height="50"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="50" id="BhX-tY-H9C"/>
@@ -73,7 +73,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aba-XY-GmA" customClass="DesignableView" customModule="OnTheMap" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="72" width="382" height="50"/>
                                                         <subviews>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="bhyvgt123" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ig3-Is-A0h">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="bhyvgt1234" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ig3-Is-A0h">
                                                                 <rect key="frame" x="0.0" y="0.0" width="382" height="50"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="50" id="IDe-tB-Va2"/>
@@ -235,19 +235,19 @@
                     <navigationItem key="navigationItem" title="On The Map" id="huM-vS-C9o">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="HrK-TZ-fLs">
                             <connections>
-                                <action selector="logoutTapped:" destination="oYX-fp-wnD" id="mR5-oC-u1k"/>
+                                <action selector="logoutTapped:" destination="oYX-fp-wnD" id="GG7-EV-DlY"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem image="icon_addpin" id="xOs-5a-BNM">
                                 <connections>
-                                    <action selector="addUserLocationTapped:" destination="oYX-fp-wnD" id="eBp-Kg-NKb"/>
+                                    <action selector="addUserLocationTapped:" destination="oYX-fp-wnD" id="RBk-Zg-IWW"/>
                                     <segue destination="K8H-sP-KXQ" kind="presentation" identifier="addLocation" modalPresentationStyle="fullScreen" id="lSh-jR-hUg"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="XGC-kz-RSf">
                                 <connections>
-                                    <action selector="refreshTapped:" destination="oYX-fp-wnD" id="oy4-N0-RuV"/>
+                                    <action selector="refreshTapped:" destination="oYX-fp-wnD" id="BGn-HF-VO6"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -279,19 +279,19 @@
                     <navigationItem key="navigationItem" title="On The Map" id="kpd-UM-LK5">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="ygv-3e-0k3">
                             <connections>
-                                <action selector="logoutTapped:" destination="nuB-0s-MGM" id="Y91-sB-nof"/>
+                                <action selector="logoutTapped:" destination="nuB-0s-MGM" id="W1P-9Q-8T8"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem image="icon_addpin" id="liJ-eU-gOv">
                                 <connections>
-                                    <action selector="addUserLocationTapped:" destination="nuB-0s-MGM" id="4hg-My-AEI"/>
+                                    <action selector="addUserLocationTapped:" destination="nuB-0s-MGM" id="VFP-Rf-713"/>
                                     <segue destination="K8H-sP-KXQ" kind="presentation" identifier="addLocation" modalPresentationStyle="fullScreen" id="Pfd-cs-opV"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="icon_refresh" id="SjI-3D-n2d">
                                 <connections>
-                                    <action selector="refreshTapped:" destination="nuB-0s-MGM" id="43e-44-dHI"/>
+                                    <action selector="refreshTapped:" destination="nuB-0s-MGM" id="fNt-vj-rll"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -582,7 +582,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="lSh-jR-hUg"/>
+        <segue reference="Pfd-cs-opV"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="icon_addpin" width="24" height="24"/>

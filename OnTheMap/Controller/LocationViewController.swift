@@ -29,34 +29,39 @@ class LocationViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             self.lat = placemark?.location?.coordinate.latitude
             self.long = placemark?.location?.coordinate.longitude
             
-            let coordinate = CLLocationCoordinate2D(latitude: self.lat!, longitude: self.long!)
-            let first = MapClient.Auth.firstName
-            let last = MapClient.Auth.lastName
-            let mediaURL = self.link!
-            
-            // Create annotation
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = "\(first) \(last)"
-            annotation.subtitle = mediaURL
-            self.mapView.addAnnotation(annotation)
-            
-            //zooming in annotation
-            let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 50 * 1609.34, longitudinalMeters: 50 * 1609.34)
-            self.mapView.setRegion(region, animated: true)
+            if let lat = self.lat, let long = self.long {
+                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                let first = MapClient.Auth.firstName
+                let last = MapClient.Auth.lastName
+                let mediaURL = self.link!
+                
+                // Create annotation
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                annotation.title = "\(first) \(last)"
+                annotation.subtitle = mediaURL
+                self.mapView.addAnnotation(annotation)
+                
+                //zooming in annotation
+                let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 50 * 1609.34, longitudinalMeters: 50 * 1609.34)
+                self.mapView.setRegion(region, animated: true)
+            }else{
+                self.showAlert(ofTitle: "No Location Found", message: "Incorect Location. Please Type Again!!! ")
+            }
         }
     }
     
     @IBAction func finishTapped(_ sender: UIButton) {
-        MapClient.postStudentLocation(key: MapClient.Auth.userId, firstName: MapClient.Auth.firstName, lastName: MapClient.Auth.lastName, mapString: location, mediaURL: link, lat: lat, long: long) { (success, error) in
-            if success {
-                MapClient.getStudentLocation { (students, error) in
-                    StudentModel.loccation = students
+        if let lat = self.lat, let long = self.long{
+            MapClient.postStudentLocation(key: MapClient.Auth.userId, firstName: MapClient.Auth.firstName, lastName: MapClient.Auth.lastName, mapString: location, mediaURL: link, lat: lat, long: long) { (success, error) in
+                if success {
+                    self.dismiss(animated: true, completion: nil)
+                }else{
+                    self.showAlert(ofTitle: "Failed Posting New Student Location", message: error?.localizedDescription ?? "")
                 }
-                self.dismiss(animated: true, completion: nil)
-            }else{
-                print("error putting student location")
             }
+        }else{
+            self.showAlert(ofTitle: "Failed Posting New Student Location", message:"Please Type Again!!!")
         }
     }
     
@@ -94,7 +99,7 @@ class LocationViewController: UIViewController, MKMapViewDelegate, CLLocationMan
                         app.open(url, options: [:], completionHandler: nil)
                     }
                 }else{
-                    showAlert(ofTitle: "Open Failed", message: "Incorrect URL")
+                    self.showAlert(ofTitle: "Open Failed", message: "Incorrect URL")
                 }
             }
         }

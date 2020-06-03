@@ -19,6 +19,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         // We will create an MKPointAnnotation for each dictionary in "locations". The
         // point annotations will be stored in this array, and then provided to the map view.
+        createAnnotation()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        createAnnotation()
+    }
+    
+    func createAnnotation(){
         var annotations = [MKPointAnnotation]()
         
         // The "locations" array is loaded with the sample data below. We are using the dictionaries
@@ -50,10 +59,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             // When the array is complete, we add the annotations to the map.
             self.mapView.addAnnotations(annotations)
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        mapView.reloadInputViews()
     }
     
     // MARK: - MKMapViewDelegate

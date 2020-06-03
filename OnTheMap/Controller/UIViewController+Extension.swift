@@ -20,14 +20,23 @@ extension UIViewController{
     @IBAction func refreshTapped(_ sender: UIBarButtonItem) {
         MapClient.getStudentLocation { (students, error) in
             if error != nil {
-                print("error refresh tapped")
+                self.alert(ofTitle: "Error Freshing Data", message: error?.localizedDescription ?? "")
             }
-            StudentModel.loccation = students
+            StudentModel.location = students
         }
+        print("refresh tapped")
     }
     
     @IBAction func addUserLocationTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "addLocation", sender: nil)
     }
+    
+    func alert(ofTitle: String, message : String){
+        let alertVC = UIAlertController(title: ofTitle, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(action)
+        present(alertVC, animated: true)
+    }
+
     
 }

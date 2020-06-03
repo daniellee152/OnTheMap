@@ -161,7 +161,6 @@ class MapClient {
     class func getStudentLocation(completion : @escaping([StudentInfo], Error?)->Void){
         taskForGetRequest(url: Endpoints.studentLocations(by: .order(limit: "100")).url, responseType: StudentLocationResponse.self) { (response, error) in
             if let response = response {
-                StudentModel.loccation = response.results
                 completion(response.results, nil)
             }else{
                 completion([], error)

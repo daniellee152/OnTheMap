@@ -15,17 +15,20 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        
-        MapClient.getStudentLocation { (students, error) in
-            StudentModel.loccation = students.filter{$0.mediaURL.contains("http")}
-            self.tableView.reloadData()
-        }
+        getStudentLocation()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
+        super.viewWillAppear(true)
+        getStudentLocation()
     }
     
+    func getStudentLocation(){
+        MapClient.getStudentLocation { (students, error) in
+            StudentModel.location = students.filter{$0.mediaURL.contains("http")}
+            self.tableView.reloadData()
+        }
+    }
 }
 
 extension ListViewController : UITableViewDelegate, UITableViewDataSource{
@@ -34,13 +37,13 @@ extension ListViewController : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return StudentModel.loccation.count
+        return StudentModel.location.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentInfo")!
         
-        let student = StudentModel.loccation[indexPath.row]
+        let student = StudentModel.location[indexPath.row]
         
         cell.textLabel?.text = "\(student.firstName) \(student.lastName)"
         cell.detailTextLabel?.text = student.mediaURL
@@ -48,7 +51,7 @@ extension ListViewController : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let student = StudentModel.loccation[indexPath.row]
+        let student = StudentModel.location[indexPath.row]
         let url = URL(string: student.mediaURL)!
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }

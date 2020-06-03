@@ -46,7 +46,7 @@ class LoginViewController: UIViewController, WKUIDelegate {
         if error != nil{
             print("error getting student location")
         }
-        StudentModel.loccation = students
+        StudentModel.location = students
  
     }
     
